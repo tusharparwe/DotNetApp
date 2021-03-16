@@ -1,0 +1,11 @@
+version: 0.0
+os: windows
+files:
+  - source: /
+    destination: C:\website\NewApp
+files:
+  - source: C:\website\NewApp
+  - cd C:\website\NewApp
+  - dir
+  - start powershell
+  - powershell -command '.\TransShell-02.ps1'

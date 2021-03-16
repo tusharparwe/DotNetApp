@@ -1,0 +1,38 @@
+version: 0.2
+
+env:
+  variables:
+    SOLUTION: .\WebApplication1.sln
+    PROJECT: WebApplication1
+    PACKAGE_DIRECTORY: .\packages
+    DOTNET_FRAMEWORK: 4.7.2
+    OUTPUT_DIR: c:\codebuild\artifacts
+phases:
+  pre_build:
+    commands:
+      - nuget restore
+      - echo "Nuget restore finished"
+      - echo $PWD
+  build:
+    commands:
+     
+      - echo "Starting build"
+      - msbuild $env:SOLUTION /p:TargetFrameworkVersion=v$env:DOTNET_FRAMEWORK /p:Configuration=Release /p:OutDir=$env:OUTPUT_DIR\
+      - echo "Build complete"
+      - cd $env:OUTPUT_DIR
+      - dir
+      - cd _PublishedWebsites
+      - dir
+      - echo "cd project folder"
+      - cd ${env:PROJECT}
+      - dir
+      - echo "Listing files"
+      - pwsh ./TransShell.ps1
+      - pwsh '$src = \Web-template.config'
+      - pwsh '$xdt = \Web.Martinrea.config'
+      - pwsh '$dst = \Web.config'
+      - pwsh  applyConfigTransformation $src $xdt $dst
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'C:\codebuild\artifacts\_PublishedWebsites\${env:PROJECT}\'

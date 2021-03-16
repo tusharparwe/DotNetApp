@@ -1,0 +1,14 @@
+version: 0.0
+os: windows
+files:
+  - source: \
+    destination: C:\website\Demo1.xeeva.com  
+  - source: \
+    destination: C:\website\Demo2.xeeva.com  
+hooks:
+  BeforeInstall:
+  - location: \before-install.ps1
+    timeout: 900
+  AfterInstall:
+  - location: \after-install.ps1
+    timeout: 900
